@@ -8,6 +8,7 @@
   const CLEAR_ANIMATION_MS = Object.freeze({ 2: 600, 3: 760 });
   const STORAGE_KEY = "blockfall.best";
   const SAVE_KEY = "blockfall.game";
+  const THEME_KEY = "blockfall.theme";
   const SAVE_VERSION = 1;
   const ROTATIONS = Object.freeze(["0", "R", "2", "L"]);
   const LINE_POINTS = Object.freeze([0, 100, 300, 500, 800]);
@@ -71,7 +72,7 @@
     "board", "score", "best", "level", "lines", "progress", "progress-label",
     "next", "next-name", "hold", "hold-status", "start", "pause", "overlay",
     "overlay-title", "overlay-text", "overlay-action", "state-label", "announcer",
-    "save-status", "offline-status"
+    "save-status", "offline-status", "theme-toggle", "theme-color"
   ].map(id => [id, document.getElementById(id)]));
   const actionButtons = [...document.querySelectorAll("[data-action]")];
   const boardCells = Array.from({ length: COLS * ROWS }, () => {
@@ -101,6 +102,29 @@
   }
 
   function announce(message) { ui.announcer.textContent = message; }
+
+  const colorScheme = window.matchMedia("(prefers-color-scheme: light)");
+
+  function readTheme() {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      return ["auto", "light", "dark"].includes(saved) ? saved : "auto";
+    } catch { return "auto"; }
+  }
+
+  function applyTheme(mode, persist = false) {
+    const resolved = mode === "auto" ? (colorScheme.matches ? "light" : "dark") : mode;
+    const next = resolved === "dark" ? "light" : "dark";
+    const actionLabel = `Switch to ${next} theme`;
+    document.documentElement.dataset.theme = resolved;
+    document.documentElement.dataset.themeMode = mode;
+    ui["theme-toggle"].setAttribute("aria-checked", String(resolved === "dark"));
+    ui["theme-toggle"].title = actionLabel;
+    ui["theme-color"].content = resolved === "light" ? "#edf4f0" : "#101416";
+    if (persist) {
+      try { localStorage.setItem(THEME_KEY, mode); } catch { /* Theme storage is optional. */ }
+    }
+  }
 
   function saveGame() {
     if (gameState.status === "ready" || gameState.clearAnimation) return;
@@ -573,6 +597,14 @@
   });
   ui.start.addEventListener("click", startGame);
   ui.pause.addEventListener("click", togglePause);
+  ui["theme-toggle"].addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    applyTheme(next, true);
+    announce(`${next === "light" ? "Light" : "Dark"} theme enabled.`);
+  });
+  colorScheme.addEventListener("change", () => {
+    if (document.documentElement.dataset.themeMode === "auto") applyTheme("auto");
+  });
   ui["overlay-action"].addEventListener("click", () => {
     if (gameState.status === "paused") togglePause();
     else startGame();
@@ -588,6 +620,7 @@
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) pauseOnLeave();
   });
+  applyTheme(readTheme());
   restoreGame();
   enableOfflineMode();
   requestAnimationFrame(frame);

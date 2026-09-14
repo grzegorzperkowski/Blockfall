@@ -3,9 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101416">
+  <meta id="theme-color" name="theme-color" content="#101416">
   <meta name="description" content="Blockfall — an offline falling-block puzzle game.">
   <title>Blockfall — Find your flow</title>
+  <script>
+    (() => {
+      let mode = "auto";
+      try {
+        const saved = localStorage.getItem("blockfall.theme");
+        if (["auto", "light", "dark"].includes(saved)) mode = saved;
+      } catch { /* Theme storage is optional. */ }
+      const theme = mode === "auto"
+        ? (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+        : mode;
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.dataset.themeMode = mode;
+    })();
+  </script>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
@@ -14,6 +28,11 @@
     <div class="brand"><span class="brand-mark" aria-hidden="true">▦</span><h1>blockfall<span>.</span></h1></div>
     <div class="top-actions">
       <span id="offline-status" class="offline">Local play</span>
+      <button id="theme-toggle" class="theme-toggle" type="button" role="switch" aria-label="Dark theme" aria-checked="true" title="Switch to light theme">
+        <span class="theme-sun" aria-hidden="true">☀</span>
+        <span class="theme-track" aria-hidden="true"><span></span></span>
+        <span class="theme-moon" aria-hidden="true">☾</span>
+      </button>
       <button id="start" class="primary" type="button">Start Game</button>
     </div>
   </header>
@@ -78,4 +97,3 @@
   <script data-goatcounter="https://blockfall.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
-
