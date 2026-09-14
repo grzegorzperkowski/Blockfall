@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101416">
+  <meta name="description" content="Blockfall — an offline falling-block puzzle game.">
+  <title>Blockfall — Find your flow</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">▦</span><h1>blockfall<span>.</span></h1></div>
+    <div class="top-actions">
+      <span id="offline-status" class="offline">Local play</span>
+      <button id="start" class="primary" type="button">Start Game</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="intro"><p class="eyebrow">A LITTLE FOCUS. A LITTLE FLOW.</p><p>Make space for the next move.</p></div>
+    <div class="game-layout">
+      <aside class="stats panel" aria-label="Game statistics">
+        <div class="stat main-score"><h2>Score</h2><p id="score">0</p></div>
+        <div class="stat"><h2>Personal best</h2><p id="best">0</p></div>
+        <div class="stat"><h2>Level</h2><p id="level">01</p></div>
+        <div class="stat"><h2>Lines cleared</h2><p id="lines">0</p></div>
+        <div class="progress-wrap"><label for="progress" id="progress-label">10 lines to level 2</label><progress id="progress" max="10" value="0"></progress></div>
+      </aside>
+
+      <section class="stage" aria-label="Game playfield">
+        <div class="board-heading"><h2>The playfield</h2><span id="state-label">READY</span></div>
+        <div class="board-frame">
+          <div id="board" class="board" role="img" aria-label="Empty playfield, 10 columns and 20 rows"></div>
+          <div id="overlay" class="overlay">
+            <span class="overlay-symbol" aria-hidden="true">↓</span>
+            <h2 id="overlay-title">Find your flow.</h2>
+            <p id="overlay-text">Fit the pieces. Clear the lines.<br>Keep possibilities open.</p>
+            <button id="overlay-action" class="primary" type="button">Start Game</button>
+          </div>
+        </div>
+        <p class="board-caption"><span class="ghost-key" aria-hidden="true"></span> Outline = landing position</p>
+      </section>
+
+      <aside class="previews" aria-label="Piece previews">
+        <section class="panel preview-panel"><div class="panel-heading"><h2>Up next</h2><span>01</span></div><div id="next" class="preview" role="img" aria-label="No next piece"></div><p id="next-name">Waiting to start</p></section>
+        <section class="panel preview-panel hold-panel"><div class="panel-heading"><h2>Hold</h2><kbd>C / ⇧</kbd></div><div id="hold" class="preview" role="img" aria-label="Hold slot empty"></div><p id="hold-status">Slot empty</p><button class="hold-panel-action" type="button" data-action="hold" aria-label="Hold or swap current piece" title="Hold or swap piece"></button></section>
+        <button id="pause" class="pause-button" type="button" aria-keyshortcuts="P Escape" aria-pressed="false" disabled>Pause</button>
+        <p class="tip">Think ahead.<br>A little space goes a long way.</p>
+      </aside>
+
+      <section class="control-panel" aria-labelledby="controls-title">
+        <div class="panel-heading"><h2 id="controls-title">Your move</h2><span>KEYBOARD OR TOUCH</span></div>
+        <div class="touch-controls">
+          <button type="button" data-action="left" aria-label="Move left"><span aria-hidden="true">←</span><small>Left</small></button>
+          <button type="button" data-action="down" aria-label="Soft drop"><span aria-hidden="true">↓</span><small>Soft drop</small></button>
+          <button type="button" data-action="right" aria-label="Move right"><span aria-hidden="true">→</span><small>Right</small></button>
+          <button type="button" data-action="ccw" aria-label="Rotate counter-clockwise"><span aria-hidden="true">↶</span><small>Rotate left</small></button>
+          <button type="button" data-action="cw" aria-label="Rotate clockwise"><span aria-hidden="true">↷</span><small>Rotate right</small></button>
+          <button type="button" data-action="hold" aria-label="Hold or swap piece"><span aria-hidden="true">⇄</span><small>Hold</small></button>
+          <button type="button" data-action="drop" class="drop-button" aria-label="Hard drop"><span aria-hidden="true">⇓</span> Hard drop <kbd>Space</kbd></button>
+        </div>
+      </section>
+
+      <aside class="guide panel" aria-labelledby="guide-title">
+        <h2 id="guide-title">Find your rhythm</h2>
+        <dl><div><dt>Move / soft drop</dt><dd><kbd>←</kbd> <kbd>→</kbd> / <kbd>↓</kbd></dd></div><div><dt>Rotate clockwise</dt><dd><kbd>↑</kbd> / <kbd>X</kbd></dd></div><div><dt>Rotate counter-clockwise</dt><dd><kbd>Z</kbd></dd></div><div><dt>Hard drop</dt><dd><kbd>Space</kbd></dd></div><div><dt>Hold / swap</dt><dd><kbd>C</kbd> / <kbd>Shift</kbd></dd></div><div><dt>Pause / resume</dt><dd><kbd>P</kbd> / <kbd>Esc</kbd></dd></div></dl>
+        <p>Clear full rows to score. Every 10 lines raises the level. Hold once per piece.</p>
+        <p id="save-status">Progress saves automatically on this device. Reload to resume.</p>
+        <p class="scoring">1 / 2 / 3 / 4 lines → 100 / 300 / 500 / 800 × level.<br>Soft drop +1 per cell · Hard drop +2 per cell.</p>
+      </aside>
+    </div>
+    <p id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+    <noscript>Enable JavaScript to play Blockfall. No internet connection is needed.</noscript>
+  </main>
+  <footer><span>BLOCKFALL / A GAME OF MAKING SPACE</span><span>No downloads. No connection. Just one more piece.</span></footer>
+</body>
+</html>
