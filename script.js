@@ -9,6 +9,7 @@
   const STORAGE_KEY = "blockfall.best";
   const SAVE_KEY = "blockfall.game";
   const THEME_KEY = "blockfall.theme";
+  const RESULT_KEY = "playground.result.blockfall.v1";
   const SAVE_VERSION = 1;
   const ROTATIONS = Object.freeze(["0", "R", "2", "L"]);
   const LINE_POINTS = Object.freeze([0, 100, 300, 500, 800]);
@@ -189,25 +190,6 @@
     }
   }
 
-  async function enableOfflineMode() {
-    if (location.protocol === "file:") {
-      ui["offline-status"].textContent = "Local files · Offline ready";
-      return;
-    }
-    if (!window.isSecureContext || !("serviceWorker" in navigator)) {
-      ui["offline-status"].textContent = "Offline caching needs HTTPS or localhost";
-      return;
-    }
-    ui["offline-status"].textContent = "Preparing offline play…";
-    try {
-      await navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" });
-      await navigator.serviceWorker.ready;
-      ui["offline-status"].textContent = "Offline ready";
-    } catch {
-      ui["offline-status"].textContent = "Offline cache unavailable · Retry online";
-    }
-  }
-
   function addScore(points) {
     gameState.score += points;
     if (gameState.score > gameState.best) {
@@ -257,6 +239,17 @@
     clearInput();
     gameState.dirty = true;
     saveGame();
+    try {
+      const previous = JSON.parse(localStorage.getItem(RESULT_KEY));
+      const stats = previous?.version === 1 && previous.app === "blockfall" && previous.stats && typeof previous.stats === "object" ? previous.stats : {};
+      const bestLines = Math.max(Number(stats.bestLines) || 0, gameState.lines);
+      const bestLevel = Math.max(Number(stats.bestLevel) || 1, gameState.level);
+      localStorage.setItem(RESULT_KEY, JSON.stringify({
+        version: 1, app: "blockfall", updatedAt: Date.now(),
+        summary: { primary: `Best: ${gameState.best.toLocaleString()}`, secondary: `${bestLines} lines · Level ${bestLevel}` },
+        stats: { bestScore: gameState.best, bestLines, bestLevel, last: { score: gameState.score, lines: gameState.lines, level: gameState.level, completedAt: Date.now() } }
+      }));
+    } catch { /* Results are optional when storage is unavailable. */ }
     announce(`Game over. Final score ${gameState.score}. Restart to play again.`);
   }
 
@@ -622,6 +615,5 @@
   });
   applyTheme(readTheme());
   restoreGame();
-  enableOfflineMode();
   requestAnimationFrame(frame);
 })();

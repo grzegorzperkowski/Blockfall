@@ -6,6 +6,9 @@
   <meta id="theme-color" name="theme-color" content="#101416">
   <meta name="description" content="Blockfall — an offline falling-block puzzle game.">
   <title>Blockfall — Find your flow</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <script>
     (() => {
       let mode = "auto";
@@ -22,6 +25,7 @@
   </script>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
+  <script src="pwa-register.js" data-pwa-register defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -93,7 +97,7 @@
     <p id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
     <noscript>Enable JavaScript to play Blockfall. No internet connection is needed.</noscript>
   </main>
-  <footer><span>BLOCKFALL / A GAME OF MAKING SPACE</span><span>No downloads. No connection. Just one more piece.</span></footer>
+  <footer><span>BLOCKFALL / A GAME OF MAKING SPACE</span><span>No downloads. No connection. <a href="/mygame/">Playground</a>.</span></footer>
   <script data-goatcounter="https://blockfall.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>

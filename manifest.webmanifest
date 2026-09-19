@@ -1,0 +1,12 @@
+{
+  "id": "/Blockfall/", "name": "Blockfall", "short_name": "Blockfall",
+  "description": "An offline falling-block puzzle game.", "lang": "en",
+  "start_url": "/Blockfall/", "scope": "/Blockfall/", "display": "standalone",
+  "background_color": "#101416", "theme_color": "#101416",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
